@@ -12,7 +12,7 @@ with open("git.properties", "r") as f:
         key, value = line.split("=", 1)
         properties[key] = value
 
-
+#test
 branch_name = properties["git.branch"]
 commit_time = properties["git.commit.time"]
 
