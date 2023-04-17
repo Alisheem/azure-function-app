@@ -1,31 +1,28 @@
 import azure.functions as func
 from flask import Flask
 from pyctuator.pyctuator import Pyctuator
-import os
+import datetime
 
-os.system("sudo apt install git-all")
+with open("git.properties", "r") as f:
+    properties = {}
+    for line in f:
+        line = line.strip()
+        if line.startswith("#") or not line:
+            continue
+        key, value = line.split("=", 1)
+        properties[key] = value
 
-app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-git_commit_hash = open(os.path.join(app_root, '.git', 'refs', 'heads', 'master')).read().strip()
-# git_repository_url = open(os.path.join(app_root, '.git', 'config')).read().split('[remote "origin"]')[1].split('url = ')[1].split('\n')[0].strip()
-# repo = git.Repo(search_parent_directories=True)
-# branch = repo.active_branch.name
-# commit = repo.head.commit
-# commit_time = datetime.datetime.fromtimestamp(commit.committed_date).strftime('%Y-%m-%d %H:%M:%S')
+
+branch_name = properties["git.branch"]
+commit_time = properties["git.commit.time"]
 
 build_info = {
-    "commit_hash":git_commit_hash
-    # "git_branch": branch,
-    # "commit_time": commit_time,
-    # "build_time": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    "branch": branch_name,
+    "commit_time": commit_time,
+    "build_time": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 }
 
-# activeProfiles="dev"
-
 app = Flask(__name__)
-
-# os.environ['activeProfiles'] = 'dev'
-
 
 pyctuator = Pyctuator(app,"monitor",
                       app_url="http://localhost:7071",
