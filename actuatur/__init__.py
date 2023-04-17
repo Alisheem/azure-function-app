@@ -1,8 +1,6 @@
 import azure.functions as func
 from flask import Flask
 from pyctuator.pyctuator import Pyctuator
-# import git
-# import datetime
 import os
 
 os.system("sudo apt install git-all")
